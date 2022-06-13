@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>Pick your taco:</h1>
+    <img th:src="@{/images/TacoCloud.png}" alt="TacoCloudHomeImage">
+    <form method="post" th:object="${taco}">
+        <div class="ingredient-group" id="wraps">
+            <h3>For your wrap:</h3>
+            <div th:each="ingredient : ${wrap}">
+                <input th:field="*{ingredientList}" type="checkbox"
+                    th:value="${ingredient.id}"/>
+                <span th:text="${ingredient.name}">Ingredient</span><br/>
+            </div>
+        </div>
+        <div class="ingredient-group" id="proteins">
+            <h3>What's your protein?</h3>
+            <div th:each="ingredient : ${protein}">
+                <input th:field="*{ingredientList}" type="checkbox"
+                    th:value="${ingredient.id}"/>
+                <span th:text="${ingredient.name}">Ingredient</span><br/>
+            </div>
+        </div>
+        <div class="ingredient-group" id="cheeses">
+            <h3>What's about the cheesy cheese?</h3>
+            <div th:each="ingredient : ${cheese}">
+                <input th:field="*{ingredientList}" type="checkbox"
+                       th:value="${ingredient.id}"/>
+                <span th:text="${ingredient.name}">Ingredient</span><br/>
+            </div>
+        </div>
+        <div class="ingredient-group" id="veggies">
+            <h3>Don't forget your veggies!</h3>
+            <div th:each="ingredient : ${veggies}">
+                <input th:field="*{ingredientList}" type="checkbox"
+                       th:value="${ingredient.id}"/>
+                <span th:text="${ingredient.name}">Ingredient</span><br/>
+            </div>
+        </div>
+        <div class="ingredient-group" id="sauces">
+            <h3>What's your protein?</h3>
+            <div th:each="ingredient : ${sauce}">
+                <input th:field="*{ingredientList}" type="checkbox"
+                       th:value="${ingredient.id}"/>
+                <span th:text="${ingredient.name}">Ingredient</span><br/>
+            </div>
+        </div>
+        <div>
+            <h3>What do you call this magnificient taco?</h3>
+            <input type="text" th:field="*{name}"/><br/>
+            <button>Submit</button>
+        </div>
+    </form>
+
+</body>
+</html>
