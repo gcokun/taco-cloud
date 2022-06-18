@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Taco Cloud</title>
+</head>
+<body>
+    <form method="post" th:action="@{/orders}" th:object="${tacoOrder}">
+        <h1>Time to order your taco!</h1>
+        <img th:src="@{/images/TacoCloud.png}" alt="TacoCloudHomeImage">
+        <h3>Your tacos in this order:</h3>
+        <a th:href="@{/design}" id="another">Design another taco</a><br/>
+        <ul>
+            <li th:each="taco : ${tacoOrder.tacoList}">
+                <span th:text="${taco.name}">Taco Name</span>
+            </li>
+        </ul>
+        <h3>Deliver my taco to following adress:</h3>
+        <label for="deliveryName">Name : </label>
+        <input type="text" th:field="*{deliveryName}"/><br/>
+        <label for="deliveryStreet">Street address : </label>
+        <input type="text" th:field="*{deliveryStreet}"><br/>
+        <label for="deliveryCity">City : </label>
+        <input type="text" th:field="*{deliveryCity}"><br/>
+        <label for="deliveryApt">Apt : </label>
+        <input type="text" th:field="*{deliveryApt}"><br/>
+        <h3>I'll pay with...</h3>
+        <label for="ccNumber">Credit Card # : </label>
+        <input type="text" th:field="*{ccNumber}"><br/>
+        <span class="validationError"
+              th:if="${#fields.hasErrors('ccNumber')}"
+              th:errors="*{ccNumber}">CC Num Error</span><br/>
+        <label for="ccExpiration">Expiration Date : </label>
+        <input type="text" th:field="*{ccExpiration}"><br/>
+        <span class="validationError"
+              th:if="${#fields.hasErrors('ccExpiration')}"
+              th:errors="*{ccExpiration}">CC Expiration Date Error</span><br/>
+        <label for="ccCVV">CVV : </label>
+        <input type="text" th:field="*{ccCVV}"><br/>
+        <span class="validationError"
+              th:if="${#fields.hasErrors('ccCVV')}"
+              th:errors="*{ccCVV}">CVV Error</span><br/>
+        <input type="submit" value="Submit Order"/>
+    </form>
+
+</body>
+<footer>
+    <a href="https://icons8.com/">Icon By</a>
+</footer>
+</html>
