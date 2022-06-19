@@ -1,7 +1,9 @@
 package gcokun.tacocloud.repository;
 
 import gcokun.tacocloud.TacoOrder;
+import gcokun.tacocloud.taco.Ingredient;
 import gcokun.tacocloud.taco.Taco;
+import org.springframework.asm.Type;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -50,12 +52,37 @@ public class JdbcOrderRepository implements OrderRepository {
         List<Taco> tacoList = tacoOrder.getTacoList();
         int i = 0;
         for (Taco taco: tacoList) {
-            save(orderId, i++, taco);
+            saveTaco(orderId, i++, taco);
         }
         return tacoOrder;
     }
 
-    private void save(long orderId, int i, Taco taco) {
-        //TODO:
+    private long saveTaco(long orderId, int orderKey, Taco taco) {
+        PreparedStatementCreatorFactory creatorFactory = new PreparedStatementCreatorFactory(
+                "insert into Taco (name, taco_order, taco_order_key, created_at) values " +
+                        "(?, ?, ?, ?)",
+                Types.VARCHAR, Type.LONG, Type.LONG, Types.TIMESTAMP);
+        taco.setCreatedAt(new Date());
+        creatorFactory.setReturnGeneratedKeys(true);
+        PreparedStatementCreator creator = creatorFactory.newPreparedStatementCreator(
+                Arrays.asList(
+                        taco.getName(),
+                        orderId,
+                        orderKey,
+                        taco.getCreatedAt()));
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcOperations.update(creator, keyHolder);
+        long tacoId = keyHolder.getKey().longValue();
+        taco.setId(tacoId);
+        saveIngredientRefs(tacoId, taco.getIngredientList());
+        return tacoId;
+    }
+
+    private void saveIngredientRefs(long tacoId, List<Ingredient> ingredientList) {
+        int key = 0;
+        for (Ingredient ingredient : ingredientList) {
+            jdbcOperations.update("insert into Ingredient_Ref (ingredient, taco, taco_key)" +
+                    "values ( ?, ?, ? )", ingredient.getId(), tacoId, key++);
+        }
     }
 }

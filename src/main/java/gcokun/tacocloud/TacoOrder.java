@@ -22,6 +22,7 @@ public class TacoOrder {
     private String deliveryName;
 
     @NotBlank(message = "Apt name is required")
+    @Digits(integer = 2, fraction = 0, message = "Should be less than 2 digits")
     private String deliveryApt;
 
     @NotBlank(message = "Street name is required")
@@ -30,7 +31,8 @@ public class TacoOrder {
     @NotBlank(message = "City name is required")
     private String deliveryCity;
 
-    @CreditCardNumber(message = "Not a valid credit card number")
+    //TODO:Disabled for testing
+    //@CreditCardNumber(message = "Not a valid credit card number")
     private String ccNumber;
 
     @Pattern(regexp="^(0[1-9]|1[0-2])([\\/])([2-9][0-9])$",
