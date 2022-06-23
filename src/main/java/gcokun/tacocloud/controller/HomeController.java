@@ -1,4 +1,4 @@
-package gcokun.tacocloud;
+package gcokun.tacocloud.controller;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
