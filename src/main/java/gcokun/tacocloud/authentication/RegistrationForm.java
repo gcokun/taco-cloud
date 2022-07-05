@@ -13,7 +13,7 @@ public class RegistrationForm {
     private final String apt;
     private final String phone;
 
-    public User toUser(PasswordEncoder passwordEncoder) {
-        return new User(username, passwordEncoder.encode(password), fullname, street, city, apt, phone);
+    public Users toUser(PasswordEncoder passwordEncoder) {
+        return new Users(username, passwordEncoder.encode(password), fullname, street, city, apt, phone);
     }
 }

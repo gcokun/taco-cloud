@@ -2,6 +2,7 @@ package gcokun.tacocloud.controller;
 
 
 import gcokun.tacocloud.repository.IngredientRepository;
+import gcokun.tacocloud.repository.TacoRepository;
 import gcokun.tacocloud.taco.Ingredient;
 import gcokun.tacocloud.taco.Ingredient.Type;
 import gcokun.tacocloud.taco.Taco;
@@ -14,6 +15,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,15 +26,19 @@ import java.util.stream.Collectors;
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepository;
+    private final TacoRepository tacoRepository;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository,
+                                TacoRepository tacoRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
-        List<Ingredient> ingredients =  ingredientRepository.findAll();
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepository.findAll().forEach(ingredient -> ingredients.add(ingredient));
         Type[] types = Ingredient.Type.values();
         for (Type type: types) {
             model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
@@ -59,7 +65,8 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return "design";
         }
-        tacoOrder.addTaco(taco);
+        Taco savedTaco = tacoRepository.save(taco);
+        tacoOrder.addTaco(savedTaco);
         log.info("Adding taco : {}", taco);
         //After process comletes, redirects to /orders/current
         return "redirect:/orders/current";

@@ -1,19 +1,16 @@
 package gcokun.tacocloud.configuration;
 
-import gcokun.tacocloud.authentication.User;
-import gcokun.tacocloud.authentication.UserDetailsService;
+import gcokun.tacocloud.authentication.Users;
 import gcokun.tacocloud.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 public class SecurityConfig {
@@ -25,8 +22,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
-            User user = userRepository.findUserByUsername(username);
-            if (user != null) return user;
+            Users users = userRepository.findUserByUsername(username);
+            if (users != null) return users;
             throw new UsernameNotFoundException("User '" + username + "' not found!");
         };
     }
@@ -34,11 +31,31 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //no need for ROLE_ prefix, it will be assumed
-        return httpSecurity.authorizeRequests().antMatchers("/design", "/orders").hasRole("USER")
-                .antMatchers("/", "/**").permitAll()
+        return httpSecurity
+                .authorizeRequests()
+                .mvcMatchers("/design", "/orders").access("hasRole('USER')")
+                .mvcMatchers("/", "/**").access("permitAll()")
+
                 .and()
-                .formLogin().loginPage("/login")
+                .formLogin()
+                .loginPage("/login")
                 .defaultSuccessUrl("/design")
+
+                .and()
+                .logout()
+                .logoutSuccessUrl("/")
+
+                // Make H2-Console non-secured; for debug purposes
+                .and()
+                .csrf()
+                .ignoringAntMatchers("/h2-console/**")
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
                 .and()
                 .build();
     }
