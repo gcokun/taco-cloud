@@ -7,7 +7,7 @@
 <body>
     <h1>Pick your taco:</h1>
     <img th:src="@{/images/TacoCloud.png}" alt="TacoCloudHomeImage">
-    <form method="post" th:object="${taco}">
+    <form th:method="POST" th:object="${taco}" th:action="@{/design}" id="tacoForm">
         <div class="ingredient-group" id="wraps">
             <h3>For your wrap:</h3>
             <div th:each="ingredient : ${wrap}">
@@ -53,6 +53,9 @@
             <input type="text" th:field="*{name}"/><br/>
             <button>Submit</button>
         </div>
+    </form>
+    <form method="POST" th:action="@{/logout}" id="logoutForm">
+        <input type="submit" value="Logout"/>
     </form>
 
 </body>

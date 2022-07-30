@@ -42,6 +42,9 @@
               th:errors="*{ccCVV}">CVV Error</span><br/>
         <input type="submit" value="Submit Order"/>
     </form>
+    <form method="POST" th:action="@{/logout}" id="logoutForm">
+        <input type="submit" value="Logout"/>
+    </form>
 
 </body>
 <footer>
