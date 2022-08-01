@@ -4,3 +4,8 @@ spring:
     name: tacocloud
     username: root
     password: root
+server:
+  port: 8080
+taco:
+  orders:
+    pageSize: 10

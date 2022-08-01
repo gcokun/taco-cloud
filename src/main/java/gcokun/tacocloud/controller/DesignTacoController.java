@@ -29,8 +29,7 @@ public class DesignTacoController {
     private final TacoRepository tacoRepository;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository,
-                                TacoRepository tacoRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository) {
         this.ingredientRepository = ingredientRepository;
         this.tacoRepository = tacoRepository;
     }
@@ -65,8 +64,8 @@ public class DesignTacoController {
         if (errors.hasErrors()) {
             return "design";
         }
-        Taco savedTaco = tacoRepository.save(taco);
-        tacoOrder.addTaco(savedTaco);
+        tacoRepository.save(taco);
+        tacoOrder.addTaco(taco);
         log.info("Adding taco : {}", taco);
         //After process comletes, redirects to /orders/current
         return "redirect:/orders/current";

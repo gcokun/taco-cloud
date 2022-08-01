@@ -1,5 +1,6 @@
 package gcokun.tacocloud.taco;
 
+import gcokun.tacocloud.authentication.Users;
 import gcokun.tacocloud.taco.Taco;
 import lombok.Data;
 import org.hibernate.validator.constraints.CreditCardNumber;
@@ -21,6 +22,9 @@ public class TacoOrder {
     private Long id;
 
     private Date placedAt = new Date();
+
+    @ManyToOne
+    private Users user;
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
@@ -46,7 +50,7 @@ public class TacoOrder {
     @Digits(integer = 3, fraction = 0, message = "Invalid CVV")
     private String ccCVV;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.MERGE)
     private List<Taco> tacoList = new ArrayList<>();
 
     public void addTaco(Taco taco) {
