@@ -4,6 +4,9 @@ spring:
     name: tacocloud
     username: root
     password: root
+  data:
+    rest:
+      base-path: /data-api
 server:
   port: 8080
 taco:

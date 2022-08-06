@@ -1,10 +1,9 @@
 package gcokun.tacocloud.configuration;
 
-import gcokun.tacocloud.authentication.Users;
+import gcokun.tacocloud.authentication.UserInformation;
 import gcokun.tacocloud.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +24,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
-            Users users = userRepository.findUserByUsername(username);
-            if (users != null) return users;
+            UserInformation userInformation = userRepository.findUserByUsername(username);
+            if (userInformation != null) return userInformation;
             throw new UsernameNotFoundException("User '" + username + "' not found!");
         };
     }
@@ -35,6 +34,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //no need for ROLE_ prefix, it will be assumed
         return httpSecurity
+                //For testing
+                .csrf().disable()
+
                 .authorizeRequests()
                 .mvcMatchers("/design", "/orders").access("hasRole('USER')")
                 .mvcMatchers("/", "/**").access("permitAll()")
@@ -48,10 +50,9 @@ public class SecurityConfig {
                 .logout()
                 .logoutSuccessUrl("/")
 
-                // Make H2-Console non-secured; for debug purposes
-                .and()
-                .csrf()
-                .ignoringAntMatchers("/h2-console/**")
+                //.and()
+                //.csrf()
+                //.ignoringAntMatchers("/h2-console/**")
 
                 // Allow pages to be loaded in frames from the same origin; needed for H2-Console
                 .and()

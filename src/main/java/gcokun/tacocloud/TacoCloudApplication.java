@@ -1,7 +1,5 @@
 package gcokun.tacocloud;
 
-import gcokun.tacocloud.authentication.RegistrationForm;
-import gcokun.tacocloud.authentication.Users;
 import gcokun.tacocloud.repository.IngredientRepository;
 import gcokun.tacocloud.repository.OrderRepository;
 import gcokun.tacocloud.repository.TacoRepository;
@@ -11,10 +9,8 @@ import gcokun.tacocloud.taco.Ingredient.Type;
 import gcokun.tacocloud.taco.Taco;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Arrays;
 

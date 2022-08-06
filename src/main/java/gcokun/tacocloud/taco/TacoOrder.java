@@ -1,9 +1,7 @@
 package gcokun.tacocloud.taco;
 
-import gcokun.tacocloud.authentication.Users;
-import gcokun.tacocloud.taco.Taco;
+import gcokun.tacocloud.authentication.UserInformation;
 import lombok.Data;
-import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -24,7 +22,7 @@ public class TacoOrder {
     private Date placedAt = new Date();
 
     @ManyToOne
-    private Users user;
+    private UserInformation user;
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
